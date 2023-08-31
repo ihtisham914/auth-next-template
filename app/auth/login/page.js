@@ -1,29 +1,22 @@
 "use client";
 import React from "react";
-import yupResolver from "@hookform/resolvers";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import loginSchema from "./loginSchema.validate";
 
 const login = () => {
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({ resolver: yupResolver(loginSchema) });
-  // const onSubmit = (data) => console.log(data);
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(e.target[0].value);
-    console.log(e.target[1].value);
-  };
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: yupResolver(loginSchema) });
+  const onSubmit = (data) => console.log(data);
 
   return (
     <div className="flex items-center justify-center h-screen w-screen">
       <form
-        onSubmit={handleSubmit}
-        // onSubmit={handleSubmit(onSubmit)}
-        className="p-9 bg-slate-100 rounded-md"
+        onSubmit={handleSubmit(onSubmit)}
+        className="p-9 bg-slate-100 rounded-md w-full sm:w-3/4 md:w-1/2 lg:w-1/3 mx-6"
       >
         <h1 className="text-lg font-semibold mb-2">Login</h1>
         <div className="mb-6">
@@ -36,12 +29,15 @@ const login = () => {
           <input
             type="email"
             id="email"
-            // {...register("email")}
+            {...register("email")}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
             placeholder="name@flowbite.com"
-            required
           />
-          {/* {errors.email && <div>{errors.email?.message}</div>} */}
+          {errors.email && (
+            <div className="text-red-500 text-sm mt-1">
+              {errors.email?.message}
+            </div>
+          )}
         </div>
         <div className="mb-6">
           <label
@@ -53,11 +49,14 @@ const login = () => {
           <input
             type="password"
             id="password"
-            // {...register("password")}
+            {...register("password")}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-            required
           />
-          {/* {errors.password && <div>{errors.password?.message}</div>} */}
+          {errors.password && (
+            <div className="text-red-500 text-sm mt-1">
+              {errors.password?.message}
+            </div>
+          )}
         </div>
         <div className="flex items-start mb-6">
           <div className="flex items-center h-5">
