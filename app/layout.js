@@ -1,3 +1,4 @@
+import Notification from "@/components/Notification";
 import "./globals.css";
 import { Providers } from "@/GlobalState/Providers";
 export const metadata = {
@@ -9,7 +10,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Notification />
+          {children}
+        </Providers>
       </body>
     </html>
   );

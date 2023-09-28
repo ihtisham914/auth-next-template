@@ -1,5 +1,14 @@
-import Image from "next/image";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useSelector } from "react-redux";
 
 export default function Home() {
-  return <main>content</main>;
+  const router = useRouter();
+  const token = useSelector((state) => state.Auth.token);
+  console.log(token);
+  if (token === "") {
+    router.push("/auth/login");
+  }
+  return <main>welcome to the app</main>;
 }
