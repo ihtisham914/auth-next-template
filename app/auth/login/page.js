@@ -5,12 +5,15 @@ import { useForm } from "react-hook-form";
 import loginSchema from "./loginSchema.validate";
 import { BiLogInCircle } from "react-icons/bi";
 import { SignIn } from "@/GlobalState/ApiCalls/authApiCall";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
+import { RotatingLines } from "react-loader-spinner";
+import Link from "next/link";
 
 const login = () => {
   const dispatch = useDispatch();
   const router = useRouter();
+  const { loading, error } = useSelector((state) => state.Auth);
   const {
     register,
     handleSubmit,
@@ -18,8 +21,7 @@ const login = () => {
   } = useForm({ resolver: yupResolver(loginSchema) });
   const onSubmit = (data) => {
     const { email, password } = data;
-    SignIn({ email, password }, dispatch);
-    router.push("/");
+    SignIn({ email, password }, dispatch, router);
   };
 
   return (
@@ -88,9 +90,25 @@ const login = () => {
           type="submit"
           className="flex items-center gap-2 text-white bg-blue-700 uppercase hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          <BiLogInCircle className="text-xl" />
+          {loading ? (
+            <RotatingLines
+              strokeColor="white"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="18"
+              visible={true}
+            />
+          ) : (
+            <BiLogInCircle className="text-xl" />
+          )}
           <span>Login</span>
         </button>
+        <div className="flex items-center justify-center gap-2 text-sm mt-4">
+          <span>Not registered yet? </span>
+          <Link href="/auth/signup" className="underline">
+            SignUp
+          </Link>
+        </div>
       </form>
     </div>
   );

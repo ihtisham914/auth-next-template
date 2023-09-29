@@ -4,14 +4,27 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupSchema } from "./signupSchema.validate.";
+import { SignUp } from "@/GlobalState/ApiCalls/authApiCall";
+import { useDispatch, useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { RotatingLines } from "react-loader-spinner";
+import { BiLogInCircle } from "react-icons/bi";
+import Link from "next/link";
 
 const signup = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { loading, error } = useSelector((state) => state.Auth);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({ resolver: yupResolver(signupSchema) });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    const { name, email, password } = data;
+    SignUp({ name, email, password }, dispatch);
+    router.push("/");
+  };
 
   return (
     <div className="flex items-center justify-center h-screen w-screen">
@@ -89,22 +102,39 @@ const signup = () => {
           <input
             type="password"
             id="password"
-            {...register("password")}
+            {...register("confirmPassword")}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
           />
-          {errors.password && (
+          {errors.confirmPassword && (
             <div className="text-red-500 text-sm mt-1">
-              {errors.password?.message}
+              {errors.confirmPassword?.message}
             </div>
           )}
         </div>
 
         <button
           type="submit"
-          className="text-white bg-blue-700 uppercase hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
+          className="flex items-center gap-2 text-white bg-blue-700 uppercase hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          sign up
+          {loading ? (
+            <RotatingLines
+              strokeColor="white"
+              strokeWidth="5"
+              animationDuration="0.75"
+              width="18"
+              visible={true}
+            />
+          ) : (
+            <BiLogInCircle className="text-xl" />
+          )}
+          <span>SignUp</span>
         </button>
+        <div className="flex items-center justify-center gap-2 text-sm mt-4">
+          <span>Already registered? </span>
+          <Link href="/auth/login" className="underline">
+            Login
+          </Link>
+        </div>
       </form>
     </div>
   );

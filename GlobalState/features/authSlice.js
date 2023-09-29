@@ -31,7 +31,12 @@ export const authSlice = createSlice({
         style: { width: "auto", height: "auto" },
       });
     },
-    signUp: (state, action) => {},
+    signUp: (state) => {
+      state.loading = false;
+      toast.success("Sign Up Successful 🎉", {
+        style: { width: "auto", height: "auto" },
+      });
+    },
     logOut: (state) => {
       state.token = null;
     },

@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 export default function Home() {
   const router = useRouter();
   const token = useSelector((state) => state.Auth.token);
-  console.log(token);
   if (token === "") {
     router.push("/auth/login");
   }
